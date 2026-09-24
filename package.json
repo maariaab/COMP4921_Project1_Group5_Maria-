@@ -1,0 +1,29 @@
+{
+  "name": "comp4921_project1_group5_maria-",
+  "version": "1.0.0",
+  "description": "v1.0 Project-1",
+  "homepage": "https://github.com/maariaab/COMP4921_Project1_Group5_Maria-#readme",
+  "bugs": {
+    "url": "https://github.com/maariaab/COMP4921_Project1_Group5_Maria-/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maariaab/COMP4921_Project1_Group5_Maria-.git"
+  },
+  "license": "ISC",
+  "author": "maria espinola",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.11.0",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.10.2"
+  }
+}
