@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Link</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+    <body>
+        <%- include("partials/navbar") %>
+
+            <section class="section">
+
+                <div class="container">
+
+                    <div class="columns is-centered">
+
+                        <div class="column is-half">
+
+                            <div class="box">
+
+                                <h1 class="title">
+                                    Login
+                                </h1>
+
+                                <form action="/login" method="POST">
+
+                <div class="field">
+                    <label class="label">Username</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="text"
+                            name="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <div class="field">
+                    <label class="label">Password</label>
+
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="password"
+                            name="password"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <button
+                    class="button is-primary is-fullwidth"
+                    type="submit"
+                >
+                    Login
+                </button>
+
+            </form>
+
+                                <hr>
+
+                                <p class="has-text-centered">
+                                    Don't have an account?
+                                    <a href="/signup">Sign up</a>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        <%- include("partials/footer") %>
+    </body>
+</html>

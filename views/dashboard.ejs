@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <%- include("partials/navbar") %>
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="title has-text-centered mb-6">
+
+                <h1 class="title">
+                    Create Content
+                </h1>
+
+                <p class="content-subtitle">
+                    What would you like to share?
+                </p>
+
+            </div>
+
+
+            <div class="columns is-centered">
+
+
+                <!-- LINK -->
+
+                <div class="column is-one-quarter">
+
+                    <a
+                        href="/content/create/link"
+                        class="box has-text-centered content-box"
+                    >
+
+                        <p class="title is-4">
+                            Link
+                        </p>
+
+                        <p class="content-text">
+                            Create a short or custom URL.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div class="column is-one-quarter">
+
+                    <a
+                        href="/content/create/image"
+                        class="box has-text-centered content-box"
+                    >
+
+                        <p class="title is-4">
+                            Image
+                        </p>
+
+                        <p class="content-text">
+                            Upload and share an image.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+                <!-- TEXT -->
+
+                <div class="column is-one-quarter">
+
+                    <a
+                        href="/content/create/text"
+                        class="box has-text-centered content-box"
+                    >
+
+                        <p class="title is-4">
+                            Text
+                        </p>
+
+                        <p class="content-text">
+                            Share text or code.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <%- include("partials/footer") %>
+
+    </body>
+
+</html>

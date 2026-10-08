@@ -6,12 +6,26 @@ const session = require("express-session");
 const connectMongo = require("connect-mongo");
 const MongoStore = connectMongo.MongoStore || connectMongo.default || connectMongo;
 
+const db_utils = include("database/db_utils");
+const db_setup = include("database/create_tables");
+
+const dashboardRouter = include("routes/dashboard");
+const authRouter = include("routes/auth");
+const contentRouter = include("routes/content");
+const publicContentRouter = include("routes/publicContent");
+
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+
+app.set("view engine", "ejs");
+app.set("views", "./views");
 
 /** Middleware */
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
+
 
 const expireTime = 1 * 60 * 60 * 1000; // 1 hour
 
@@ -46,15 +60,44 @@ app.use(
   })
 );
 
-app.locals.expireTime = expireTime;
+app.use((req, res, next) => {
+    res.locals.loggedIn = !!req.session.userId;
+    next();
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
 });
 
+app.locals.expireTime = expireTime;
+
+app.get('/', (req, res) => {
+     res.render("index");
+});
+
+app.use("/content", contentRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/", authRouter);
+app.use("/c", publicContentRouter
+);
+
+app.use((req, res) => {
+    res.status(404).render("404");
+
+});
+
+
+//Start server
 async function startServer() {
+
+  await db_utils.printMySQLVersion();
+  const ok = await db_setup.createTables();
+
+   if (!ok) {
+    console.log("Table creation failed. Server not started.");
+    process.exit(1);
+  }
+
     app.listen(port, () => {
         console.log(`Node application listening on port ${port}`);
     });
 }
 startServer().catch((err) => console.error("Failed to start server:", err));
+

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Content</title>
+
+    <!-- Bulma -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+
+    <!-- Custom CSS -->
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- Navbar -->
+    <%- include("../partials/navbar") %>
+
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="columns is-centered">
+
+                <div class="column is-8-tablet is-6-desktop">
+
+                    <h1 class="title">
+                        Edit Content
+                    </h1>
+
+
+                    <!-- Error message -->
+
+                    <% if (error) { %>
+
+                        <div class="notification is-danger">
+
+                            <%= error %>
+
+                        </div>
+
+                    <% } %>
+
+
+                    <div class="box">
+
+                        <form
+                            action="/content/<%= item.content_id %>/edit"
+                            method="POST"
+                            enctype="multipart/form-data"
+                        >
+
+
+                            <!-- =====================================
+                                 TITLE
+                                 Applies to every content type
+                                 ===================================== -->
+
+                            <div class="field">
+
+                                <label class="label">
+                                    Title
+                                </label>
+
+                                <div class="control">
+
+                                    <input
+                                        class="input"
+                                        type="text"
+                                        name="title"
+                                        maxlength="255"
+                                        value="<%= item.title %>"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- =====================================
+                                 TEXT CONTENT
+                                 ===================================== -->
+
+                            <% if (item.content_type === "text") { %>
+
+                                <div class="field">
+
+                                    <label class="label">
+                                        Text
+                                    </label>
+
+                                    <div class="control">
+
+                                        <textarea
+                                            class="textarea"
+                                            name="textBody"
+                                            rows="12"
+                                            required
+                                        ><%= item.text_body %></textarea>
+
+                                    </div>
+
+                                </div>
+
+                            <% } %>
+
+
+
+                            <!-- =====================================
+                                 REDIRECT
+                                 ===================================== -->
+
+                            <% if (item.content_type === "redirect") { %>
+
+                                <div class="field">
+
+                                    <label class="label">
+                                        Destination URL
+                                    </label>
+
+                                    <div class="control">
+
+                                        <input
+                                            class="input"
+                                            type="url"
+                                            name="destinationUrl"
+                                            value="<%= item.destination_url %>"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <p class="help">
+                                        Enter the website this short link
+                                        should redirect to.
+                                    </p>
+
+                                </div>
+
+
+                                <!-- Short URL cannot be changed -->
+
+                                <div class="field">
+
+                                    <label class="label">
+                                        Short URL
+                                    </label>
+
+                                    <div class="control">
+
+                                        <input
+                                            class="input"
+                                            type="text"
+                                            value="/c/<%= item.content_id %>"
+                                            readonly
+                                        >
+
+                                    </div>
+
+                                    <p class="help">
+                                        The short URL cannot be changed.
+                                    </p>
+
+                                </div>
+
+                            <% } %>
+
+
+
+                            <!-- =====================================
+                                 IMAGE
+                                 ===================================== -->
+
+                            <% if (item.content_type === "image") { %>
+
+
+                                <!-- Current image -->
+
+                                <div class="field">
+
+                                    <label class="label">
+                                        Current Image
+                                    </label>
+
+                                    <div class="current-image">
+
+                                        <figure class="image">
+
+                                            <img
+                                                src="<%= item.image_url %>"
+                                                alt="<%= item.alt_text || item.title %>"
+                                            >
+
+                                        </figure>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- Alt text -->
+
+                                <div class="field">
+
+                                    <label class="label">
+                                        Alt Text
+                                    </label>
+
+                                    <div class="control">
+
+                                        <input
+                                            class="input"
+                                            type="text"
+                                            name="altText"
+                                            maxlength="255"
+                                            value="<%= item.alt_text || '' %>"
+                                        >
+
+                                    </div>
+
+                                    <p class="help">
+                                        Describe the image for accessibility.
+                                    </p>
+
+                                </div>
+
+
+
+                                <!-- Optional replacement image -->
+
+                                <div class="field">
+
+                                    <label class="label">
+                                        Replace Image
+                                    </label>
+
+                                    <div class="control">
+
+                                        <input
+                                            class="input"
+                                            type="file"
+                                            name="image"
+                                            accept="image/jpeg,image/png,image/webp,image/gif"
+                                        >
+
+                                    </div>
+
+                                    <p class="help">
+                                        Leave this empty to keep the
+                                        current image.
+                                    </p>
+
+                                </div>
+
+                            <% } %>
+
+
+
+                            <div class="field">
+
+                                <label class="label">
+                                    Categories
+                                </label>
+
+                                <div class="control">
+
+                                    <label class="checkbox mr-4">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="1"
+                                            <%= item.category_ids.includes(1) ? "checked" : "" %>
+                                        >
+                                        Education
+                                    </label>
+
+                                    <label class="checkbox mr-4">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="2"
+                                            <%= item.category_ids.includes(2) ? "checked" : "" %>
+                                        >
+                                        Humor
+                                    </label>
+
+                                    <label class="checkbox mr-4">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="3"
+                                            <%= item.category_ids.includes(3) ? "checked" : "" %>
+                                        >
+                                        Technology
+                                    </label>
+
+                                    <label class="checkbox">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="4"
+                                            <%= item.category_ids.includes(4) ? "checked" : "" %>
+                                        >
+                                        Entertainment
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- =====================================
+                                 BUTTONS
+                                 ===================================== -->
+
+                            <div class="field is-grouped mt-5">
+
+                                <div class="control">
+
+                                    <button
+                                        class="button is-primary"
+                                        type="submit"
+                                    >
+                                        Save Changes
+                                    </button>
+
+                                </div>
+
+
+                                <div class="control">
+
+                                    <a
+                                        class="button is-light"
+                                        href="/content/mine"
+                                    >
+                                        Cancel
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <%- include("../partials/footer") %>
+
+    </body>
+
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Your Content</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+    <%- include("../partials/navbar") %>
+
+
+    <section class="section">
+
+        <div class="container">
+
+            <!-- SEARCH LINKS -->
+
+            <form action="/content/stats" method="GET" class="mb-5">
+
+                <div class="field has-addons">
+
+                    <div class="control is-expanded">
+
+                        <input
+                            class="input"
+                            type="text"
+                            name="search"
+                            placeholder="Search links by title..."
+                            value="<%= search || '' %>"
+                        >
+
+                    </div>
+
+                    <div class="control">
+
+                        <button
+                            class="button is-info"
+                            type="submit"
+                        >
+                            Search
+                        </button>
+
+                    </div>
+
+                    <% if (search) { %>
+
+                        <div class="control">
+
+                            <a
+                                class="button is-light"
+                                href="/content/stats"
+                            >
+                                Clear
+                            </a>
+
+                        </div>
+
+                    <% } %>
+
+                </div>
+
+            </form>
+
+
+            <% if (content.length === 0) { %>
+
+                    <div class="notification is-light has-text-centered">
+
+                        <% if (search) { %>
+
+                            No links found matching
+                            "<strong><%= search %></strong>".
+
+                        <% } else { %>
+
+                            You haven't created any links yet.
+
+                        <% } %>
+
+                    </div>
+
+            <% } else { %>
+
+
+                <div class="table-container">
+
+                    <table
+                        class="table is-fullwidth is-hoverable stats-table"
+                    >
+
+                        <thead>
+
+                            <tr>
+                                <th>Ttitle</th>
+
+                                <th>URL</th>
+
+                                <th>Categories</th>
+
+                                <th>Hits</th>
+
+                                <th>Active</th>
+
+                                <th>Created</th>
+
+                                <th>Last Hit</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <% content.forEach(item => { %>
+
+                                <tr>
+                                    
+                                    
+                                    <td>
+                                        <%= item.title || "Untitled" %>
+                                    </td>
+
+                                    <!-- URL -->
+
+                                    <td>
+
+                                        <a
+                                            href="/c/<%= item.content_id %>"
+                                            class="stats-redirect-link"
+                                            data-url="/c/<%= item.content_id %>"
+                                        >
+                                            /c/<%= item.content_id %>
+                                        </a>
+
+                                    </td>
+
+                                    <!-- CATEGORIES -->
+
+                                    <td>
+
+                                        <%
+                                            const categoryColors = {
+                                                Education: "is-info",
+                                                Humor: "is-warning",
+                                                Technology: "is-success",
+                                                Entertainment: "is-danger"
+                                            };
+                                        %>
+
+                                        <% if (item.categories && item.categories.length > 0) { %>
+
+                                            <div class="tags are-small">
+
+                                                <% item.categories.forEach(category => { %>
+
+                                                    <span
+                                                        class="tag <%= categoryColors[category] || 'is-light' %>"
+                                                    >
+                                                        <%= category %>
+                                                    </span>
+
+                                                <% }) %>
+
+                                            </div>
+
+                                        <% } else { %>
+
+                                            <span>—</span>
+
+                                        <% } %>
+
+                                    </td>
+
+
+                                    <!-- HIT COUNT -->
+
+                                    <td>
+
+                                        <%= item.hit_count %>
+
+                                    </td>
+
+
+                                    <!-- ACTIVE -->
+
+                                    <td>
+
+                                        <input
+                                            type="checkbox"
+                                            class="active-toggle"
+                                            data-content-id="<%= item.content_id %>"
+                                            <%= item.is_active ? "checked" : "" %>
+                                        >
+
+                                    </td>
+
+
+                                    <!-- CREATED -->
+
+                                    <td>
+
+                                        <%= formatMonthDay(item.created_at) %>
+
+                                    </td>
+
+
+                                    <!-- LAST HIT -->
+
+                                    <td>
+
+                                        <%= formatMonthDay(item.last_hit_at) %>
+
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } %>
+
+
+    <div class="modal" id="redirectModal">
+
+    <div class="modal-background"></div>
+
+    <div class="modal-card">
+
+        <header class="modal-card-head">
+            <p class="modal-card-title">
+                Leaving This Page
+            </p>
+        </header>
+
+        <section class="modal-card-body has-text-centered">
+
+            <p class="mb-3">
+                You will be redirected to the selected link in
+                <strong>
+                    <span id="redirectCountdown">5</span>
+                </strong>
+                seconds.
+            </p>
+
+            <p class="mb-3">
+                Would you like to continue immediately?
+            </p>
+
+        </section>
+
+        <footer class="modal-card-foot is-justify-content-center">
+
+            <button
+                type="button"
+                class="button is-light"
+                id="redirectNow"
+            >
+                Go Now
+            </button>
+
+            <button
+                type="button"
+                class="button is-danger"
+                id="cancelRedirect"
+            >
+                Cancel
+            </button>
+
+        </footer>
+
+    </div>
+
+</div>
+
+        </div>
+
+    </section>
+
+     <%- include("../partials/footer") %>
+
+        <script>
+
+        const toggles =
+            document.querySelectorAll(
+                ".active-toggle"
+            );
+
+
+        toggles.forEach(toggle => {
+
+            toggle.addEventListener(
+                "change",
+                async () => {
+
+                    const contentId =
+                        toggle.dataset.contentId;
+
+                    const isActive =
+                        toggle.checked;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                `/content/${contentId}/status`,
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/x-www-form-urlencoded"
+                                    },
+
+                                    body:
+                                        `isActive=${isActive}`
+                                }
+                            );
+
+
+                        if (!response.ok) {
+
+                            // Put checkbox back
+                            toggle.checked =
+                                !isActive;
+
+                            alert(
+                                "Unable to change URL status."
+                            );
+
+                        }
+
+                    }
+                    catch (err) {
+
+                        toggle.checked =
+                            !isActive;
+
+                        alert(
+                            "Unable to change URL status."
+                        );
+
+                    }
+
+                }
+            );
+
+            const redirectModal = document.getElementById("redirectModal");
+
+                const redirectLinks = document.querySelectorAll(
+                    ".stats-redirect-link"
+                );
+
+                const countdownElement = document.getElementById(
+                    "redirectCountdown"
+                );
+
+                const redirectNowButton = document.getElementById(
+                    "redirectNow"
+                );
+
+                const cancelRedirectButton = document.getElementById(
+                    "cancelRedirect"
+                );
+
+                let redirectUrl = null;
+                let countdownInterval = null;
+                let secondsRemaining = 5;
+
+
+                // =====================================
+                // CLEAR COUNTDOWN
+                // =====================================
+
+                function clearRedirectCountdown() {
+
+                    if (countdownInterval !== null) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
+
+                }
+
+
+                // =====================================
+                // CLOSE MODAL
+                // =====================================
+
+                function closeRedirectModal() {
+
+                    clearRedirectCountdown();
+
+                    redirectModal.classList.remove("is-active");
+
+                    redirectUrl = null;
+
+                }
+
+
+                // =====================================
+                // REDIRECT
+                // =====================================
+
+                function performRedirect() {
+
+                    if (!redirectUrl) {
+                        return;
+                    }
+
+                    clearRedirectCountdown();
+
+                    window.location.assign(redirectUrl);
+
+                }
+
+
+                // =====================================
+                // OPEN MODAL
+                // =====================================
+
+                redirectLinks.forEach(link => {
+
+                    link.addEventListener("click", event => {
+
+                        event.preventDefault();
+
+                        // Clear previous countdown
+                        clearRedirectCountdown();
+
+                        redirectUrl = link.dataset.url;
+
+                        secondsRemaining = 5;
+
+                        countdownElement.textContent = secondsRemaining;
+
+                        redirectModal.classList.add("is-active");
+
+                        countdownInterval = setInterval(() => {
+
+                            secondsRemaining--;
+
+                            countdownElement.textContent = secondsRemaining;
+
+                            if (secondsRemaining <= 0) {
+                                performRedirect();
+                            }
+
+                        }, 1000);
+
+                    });
+
+                });
+
+
+                // =====================================
+                // GO NOW
+                // =====================================
+
+                redirectNowButton.addEventListener("click", () => {
+                    performRedirect();
+                });
+
+
+                // =====================================
+                // CANCEL
+                // =====================================
+
+                cancelRedirectButton.addEventListener("click", () => {
+                    closeRedirectModal();
+                });
+
+
+                // =====================================
+                // CLICK OUTSIDE MODAL
+                // =====================================
+
+                redirectModal
+                    .querySelector(".modal-background")
+                    .addEventListener("click", closeRedirectModal);
+
+
+                // =====================================
+                // ESCAPE KEY
+                // =====================================
+
+                document.addEventListener("keydown", event => {
+
+                    if (
+                        event.key === "Escape" &&
+                        redirectModal.classList.contains("is-active")
+                    ) {
+                        closeRedirectModal();
+                    }
+
+                });
+
+                    });
+
+        </script>
+
+       
+
+    </body>
+
+</html>

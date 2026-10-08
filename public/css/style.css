@@ -1,0 +1,410 @@
+/* Login Page*/
+
+html,body {
+    background-color: pink;
+    min-height: 100vh;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-footer {
+    margin-top: auto;
+}
+
+.title {
+    color: white;
+    -webkit-text-stroke: 1px white; 
+    font-size: 2rem;
+}
+
+.browse-section {
+    min-height: 100vh;
+}
+
+.signup-container {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.signup-container .box {
+    padding: 2rem;
+}
+
+.main-text{
+    color: white;
+    -webkit-text-stroke: 1px white; 
+}
+
+.content-subtitle {
+    color: white; 
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.subtitle, .modal-card-title{
+    color: black
+}
+
+.button.is-primary {
+    background-color: #d63384;
+    color: white;
+}
+.button.is-link {
+    background-color: #d63384;
+    color: white;
+}
+
+.stats-table-container {
+    background-color: white;
+}
+
+/* Stats table */
+.stats-table {
+    background-color: #000000;
+    color: white;
+}
+
+/* Table header */
+.stats-table thead th {
+    background-color: #000000;
+    color: white;
+}
+
+/* Table cells */
+.stats-table td {
+    background-color: #000000;
+    color: white;
+}
+
+
+.content-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
+
+.modal-buttons {
+    gap: 2rem;
+}
+
+.modal-card-body{
+    justify-content: center;
+    text-align: center;
+}
+
+.content-card-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #eeeeee;
+    align-items: left;
+}
+
+.content-card-footer .tags {
+    margin-bottom: 0;
+}
+
+.card-management-controls {
+    display: flex;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid white;
+}
+
+.category-tabs {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.category-tabs ul {
+    border-bottom: 1px solid #d8a8b7;
+}
+
+.category-tabs a {
+    color: #5c3545;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.category-tabs a:hover {
+    color: #d63384;
+    border-bottom-color: #d63384;
+}
+
+.category-tabs li.is-active a {
+    color: #d63384;
+    border-bottom-color: #d63384;
+    font-weight: 700;
+}
+
+.stats-table .tags {
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.stats-table td {
+    vertical-align: middle;
+}
+
+.stats-table td .tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* =====================================
+   404 ERROR PAGE
+===================================== */
+
+.error-page {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.error-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    min-height: 400px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Large faded 404 behind content */
+.error-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: clamp(10rem, 30vw, 25rem);
+    font-weight: 900;
+    line-height: 1;
+
+    color: #d63384;
+    opacity: 0.12;
+
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* Text layered over the 404 */
+.error-content {
+    position: relative;
+    z-index: 1;
+
+    text-align: center;
+    max-width: 600px;
+    padding: 1rem;
+}
+
+.error-content .title {
+    color: #d63384;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.error-content .subtitle {
+    color: white;
+    line-height: 1.6;
+}
+
+.content-box {
+    background-color: #d63384;
+}
+.content-text {
+    color: white;
+}
+
+#redirectModal .modal-card {
+    max-width: 450px;
+    width: calc(100% - 2rem);
+    background-color: #ffe4ec;
+}
+#redirectModal .modal-card-body, 
+#redirectModal .modal-card-head{
+    background-color: #ffe4ec;
+    color: grey;
+    text-align: center;
+}
+
+#redirectModal .modal-card-foot {
+    justify-content: center;
+    gap: 1.5rem;
+    background-color: #ffe4ec;
+    justify-content: center;
+    color: grey;
+}
+
+#redirectCountdown {
+    color: #d63384;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+#delete-modal .modal-card {
+    max-width: 450px;
+}
+
+#delete-modal .modal-card-head,
+#delete-modal .modal-card-body,
+#delete-modal .modal-card-foot {
+    background-color: #ffe4ec;
+    text-align: center;
+    justify-content: center;
+}
+
+#delete-modal .modal-card-foot {
+    justify-content: center;
+}
+
+
+#browseRedirectModal .modal-card {
+    background-color: #ffe4ec;
+    max-width: 450px;
+    width: calc(100% - 2rem);
+}
+
+#browseRedirectModal .modal-card-foot {
+    background-color: #ffe4ec;
+    justify-content: center;
+    gap: 1.5rem;
+}
+#browseRedirectModal .modal-card-head{
+    background-color: #ffe4ec;
+}
+#browseRedirectModal .modal-card-body{
+    background-color: #ffe4ec;
+    color: grey
+}
+
+
+#browseRedirectCountdown {
+    color: #d63384;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.site-footer {
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: transparent;
+
+    border-top: 2px solid #d8a8b7;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-links span {
+    font-size: 0.8rem;
+    color: #777;
+    font-weight: 400;
+}
+
+@media screen and (max-width: 600px) {
+    .site-footer {
+        padding: 1rem;
+    }
+
+    .footer-links {
+        gap: 1rem;
+    }
+}
+
+
+/* =========================================
+   MASONRY FEED
+   ========================================= */
+
+.content-feed {
+    width: 100%;
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    column-count: 1;
+    column-gap: 1.5rem;
+}
+
+
+/* Individual posts */
+
+.content-card {
+    width: 100%;
+
+    display: inline-block;
+
+    margin-bottom: 1.5rem;
+
+    break-inside: avoid;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+/* Images */
+
+.content-card .card-image img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+}
+
+
+/* Text */
+
+.text-post {
+    overflow-wrap: anywhere;
+
+    line-height: 1.6;
+}
+
+
+
+@media screen and (min-width: 275px) {
+
+    .content-feed {
+        max-width: 1400px;
+
+        column-count: 4;
+    }
+
+}
+    
+
+@media screen and (max-width: 1300px) {
+    .category-tabs {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+}

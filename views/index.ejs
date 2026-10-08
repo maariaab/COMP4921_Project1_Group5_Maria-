@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>COMP 4921: Project 1</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+
+
+<body>
+
+     <%- include("partials/navbar") %>
+
+        <section class="hero is-fullheight main-background">
+            <div class="hero-body">
+
+                <div class="container has-text-centered">
+
+                    <h1 class="title is-1 main-text">
+                        COMP 4921: Project 1
+                    </h1>
+
+                    <p class="subtitle">
+                        Share text, images, and links with a simple URL.
+                    </p>
+
+                    <div class="buttons is-centered">
+
+                        <a
+                            href="/content"
+                            class="button is-link is-large"
+                        >
+                            View Content
+                        </a>
+
+                        <% if (loggedIn) { %>
+
+                            <a
+                                href="/content/create"
+                                class="button is-primary is-large"
+                            >
+                                Create Content
+                            </a>
+
+                        <% } else { %>
+
+                            <a
+                                href="/login"
+                                class="button is-primary is-large"
+                            >
+                                Create Content
+                            </a>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <%- include("partials/footer") %>
+
+    </body>
+</html>

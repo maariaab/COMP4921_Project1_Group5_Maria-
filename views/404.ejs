@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Link</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+<body>
+
+    <%- include("partials/navbar") %>
+
+
+    <section class="error-page">
+
+        <div class="error-container">
+
+            <!-- Large opaque background text -->
+            <div class="error-background" aria-hidden="true">
+                404
+            </div>
+
+            <!-- Foreground content -->
+            <div class="error-content">
+
+                <h2 class="title is-2">
+                    Page Not Found
+                </h2>
+
+                <p class="subtitle is-5">
+                    <%= typeof message !== "undefined"
+                        ? message
+                        : "Oops! The page you requested might have been removed or could not be found."
+                    %>
+                </p>
+
+                <a href="/" class="button is-dark mt-4">
+                    Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <%- include("partials/footer") %>
+
+    </body>
+</html>

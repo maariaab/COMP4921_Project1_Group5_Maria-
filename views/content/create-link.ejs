@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Link</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <%- include("../partials/navbar") %>
+
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="columns is-centered">
+
+                <div class="box">
+
+                    <h1 class="title">
+                        Create Link
+                    </h1>
+
+
+                    <% if (error) { %>
+
+                        <div class="notification is-danger">
+
+                            <%= error %>
+
+                        </div>
+
+                    <% } %>
+
+
+                    <form
+                        action="/content/create/link"
+                        method="POST"
+                    >
+
+
+                        <div class="field">
+
+                            <label class="label">
+                                Title
+                            </label>
+
+                            <div class="control">
+
+                                <input
+                                    class="input"
+                                    type="text"
+                                    name="title"
+                                    maxlength="255"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label class="label">
+                                Destination URL
+                            </label>
+
+                            <div class="control">
+
+                                <input
+                                    class="input"
+                                    type="url"
+                                    name="destinationUrl"
+                                    placeholder="https://example.com"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label class="label">
+                                Custom URL
+                            </label>
+
+                            <div class="control">
+
+                                <input
+                                    class="input"
+                                    type="text"
+                                    name="customId"
+                                    maxlength="12"
+                                    placeholder="Optional"
+                                >
+
+                            </div>
+
+                            <p class="help">
+                                Leave blank to generate one automatically.
+                            </p>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label class="label">
+                                Categories
+                            </label>
+
+                            <div class="control">
+
+                                <label class="checkbox mr-4">
+                                    <input
+                                        type="checkbox"
+                                        name="categories"
+                                        value="1"
+                                    >
+                                    Education
+                                </label>
+
+                                <label class="checkbox mr-4">
+                                    <input
+                                        type="checkbox"
+                                        name="categories"
+                                        value="2"
+                                    >
+                                    Humor
+                                </label>
+
+                                <label class="checkbox mr-4">
+                                    <input
+                                        type="checkbox"
+                                        name="categories"
+                                        value="3"
+                                    >
+                                    Technology
+                                </label>
+
+                                <label class="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="categories"
+                                        value="4"
+                                    >
+                                    Entertainment
+                                </label>
+
+                            </div>
+
+            
+
+                        </div>
+
+                         <div class="field">
+
+                        </div>
+
+                         <div class="field">
+
+                            <div class="control">
+
+                                <button
+                                    class="button is-primary"
+                                    type="submit"
+                                >
+                                    Create Link
+                                </button>
+
+                            </div>
+
+
+                        
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <%- include("../partials/footer") %>
+
+    </body>
+
+</html>

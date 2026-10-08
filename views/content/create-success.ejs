@@ -1,0 +1,72 @@
+<div class="notification is-success">
+
+    <h1 class="title is-4">
+        Content Created Successfully!
+    </h1>
+
+    <p>
+        Your content is available at:
+    </p>
+
+</div>
+
+
+<div class="box">
+
+    <p class="mb-4">
+
+        <a href="<%= publicUrl %>">
+            <%= publicUrl %>
+        </a>
+
+    </p>
+
+
+    <p>
+
+        You will be redirected in
+
+        <strong>
+            <span id="countdown">5</span>
+        </strong>
+
+        seconds.
+
+    </p>
+
+</div>
+
+
+<script>
+
+    let secondsRemaining = 5;
+
+    const countdown =
+        document.getElementById(
+            "countdown"
+        );
+
+
+    const timer =
+        setInterval(() => {
+
+            secondsRemaining--;
+
+            countdown.textContent =
+                secondsRemaining;
+
+
+            if (
+                secondsRemaining <= 0
+            ) {
+
+                clearInterval(timer);
+
+                window.location.href =
+                    "/c/<%= contentId %>";
+
+            }
+
+        }, 1000);
+
+</script>
