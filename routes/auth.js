@@ -204,10 +204,8 @@ router.post("/login", async (req, res) => {
 
     try {
 
-        const {
-            username,
-            password
-        } = req.body;
+        const { username, password } = req.body;
+
 
 
         if (!username || !password) {

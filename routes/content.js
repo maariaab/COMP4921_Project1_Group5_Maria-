@@ -137,15 +137,9 @@ router.get(
     "/create/link",
     requireLogin,
     (req, res) => {
-
-        //console.log("Reached GET /content/create/link");
-
-        //res.send("Create link route works");
-
-         
         res.render("content/create-link", {
-     
-            error: null
+            error: null, 
+            createdLinkId: null
         });
         
 
@@ -153,6 +147,7 @@ router.get(
     
 
 );
+
 
 router.post(
     "/create/link",
@@ -167,44 +162,96 @@ router.post(
                 customId
             } = req.body;
 
-
             // =====================================
-            // VALIDATE DESTINATION URL
+            // 1. VALIDATE DESTINATION URL
             // =====================================
 
-            if (!destinationUrl) {
+            const cleanDestinationUrl =
+                typeof destinationUrl === "string"
+                    ? destinationUrl.trim()
+                    : "";
+
+            if (!cleanDestinationUrl) {
+
+                return res.status(400).render(
+                    "content/create-link",
+                    {
+                        error: "Destination URL is required.",
+                        createdLinkId: null
+                    }
+                );
+            }
+
+            // Only allow HTTP and HTTPS URLs.
+            try {
+
+                const url = new URL(cleanDestinationUrl);
+
+                if (
+                    url.protocol !== "http:" &&
+                    url.protocol !== "https:"
+                ) {
+                    throw new Error("Invalid protocol");
+                }
+
+            } catch {
 
                 return res.status(400).render(
                     "content/create-link",
                     {
                         error:
-                            "Destination URL is required."
+                            "Please enter a valid HTTP or HTTPS URL.",
+                        createdLinkId: null
                     }
                 );
-
             }
 
 
             // =====================================
-            // CUSTOM ID OR GENERATED ID?
+            // 2. GET SELECTED CATEGORIES
             // =====================================
 
-            const hasCustomId =
-                customId &&
-                customId.trim().length > 0;
+            const allowedCategories = ["1", "2", "3", "4"];
+
+            const categories = [
+                ...new Set(
+                    []
+                        .concat(req.body.categories || [])
+                        .filter(category =>
+                            allowedCategories.includes(category)
+                        )
+                )
+            ];
+
+
+            // =====================================
+            // 3. PREPARE CONTENT INFORMATION
+            // =====================================
+
+            const cleanTitle =
+                typeof title === "string"
+                    ? title.trim()
+                    : "";
+
+            const cleanCustomId =
+                typeof customId === "string"
+                    ? customId.trim()
+                    : "";
+
+            const hasCustomId = cleanCustomId.length > 0;
+
+            const userId = req.session.userId;
 
             let contentId;
 
 
             // =====================================
-            // CUSTOM ID
+            // 4. CUSTOM URL
             // =====================================
 
             if (hasCustomId) {
 
-                contentId =
-                    customId.trim();
-
+                contentId = cleanCustomId;
 
                 if (!validateContentId(contentId)) {
 
@@ -215,67 +262,47 @@ router.post(
                                 "Custom URL must be 3-12 " +
                                 "characters and contain only " +
                                 "letters, numbers, hyphens, " +
-                                "or underscores."
+                                "or underscores.",
+                            createdLinkId: null
                         }
                     );
-
                 }
 
-
                 const contentData = {
-
                     contentId,
-
-                    userId:
-                        req.session.userId,
-
-                    title:
-                        title
-                            ? title.trim()
-                            : null,
-
-                    expiresAt:
-                        null
-
+                    userId,
+                    title: cleanTitle || null,
+                    expiresAt: null
                 };
-
 
                 try {
 
                     await createRedirect(
                         contentData,
-                        destinationUrl
+                        cleanDestinationUrl
                     );
 
-                }
-                catch (err) {
+                } catch (err) {
 
-                    if (
-                        err.code ===
-                        "ER_DUP_ENTRY"
-                    ) {
+                    if (err.code === "ER_DUP_ENTRY") {
 
-                        return res
-                            .status(409)
-                            .render(
-                                "content/create-link",
-                                {
-                                    error:
-                                        "That custom URL " +
-                                        "is already in use."
-                                }
-                            );
-
+                        return res.status(409).render(
+                            "content/create-link",
+                            {
+                                error:
+                                    "That custom URL is already in use.",
+                                createdLinkId: null
+                            }
+                        );
                     }
 
                     throw err;
-
                 }
 
             }
 
             // =====================================
-            // AUTOMATICALLY GENERATED ID
+            // 5. AUTOMATICALLY GENERATED URL
             // =====================================
 
             else {
@@ -284,126 +311,99 @@ router.post(
 
                 let created = false;
 
-
                 for (
                     let attempt = 0;
                     attempt < maxAttempts;
                     attempt++
                 ) {
 
-                    contentId =
-                        generateContentId();
-
+                    contentId = generateContentId();
 
                     const contentData = {
-
                         contentId,
-
-                        userId:
-                            req.session.userId,
-
-                        title:
-                            title
-                                ? title.trim()
-                                : null,
-
-                        expiresAt:
-                            null
-
+                        userId,
+                        title: cleanTitle || null,
+                        expiresAt: null
                     };
-
 
                     try {
 
                         await createRedirect(
                             contentData,
-                            destinationUrl
+                            cleanDestinationUrl
                         );
 
                         created = true;
 
                         break;
 
-                    }
-                    catch (err) {
+                    } catch (err) {
 
-                        if (
-                            err.code ===
-                            "ER_DUP_ENTRY"
-                        ) {
+                        if (err.code === "ER_DUP_ENTRY") {
 
-                            // Collision.
-                            // Loop generates another ID.
+                            // Generate another ID.
                             continue;
-
                         }
 
-                        // Some unrelated DB error
                         throw err;
-
                     }
-
                 }
-
 
                 if (!created) {
 
-                    return res
-                        .status(500)
-                        .render(
-                            "content/create-link",
-                            {
-                                error:
-                                    "Unable to generate " +
-                                    "a unique URL. " +
-                                    "Please try again."
-                            }
-                        );
-
+                    return res.status(500).render(
+                        "content/create-link",
+                        {
+                            error:
+                                "Unable to generate a unique URL. " +
+                                "Please try again.",
+                            createdLinkId: null
+                        }
+                    );
                 }
-
             }
 
 
             // =====================================
-            // SUCCESS
+            // 6. SAVE CATEGORIES
             // =====================================
 
-            const publicUrl =
-                `${req.protocol}://${req.get("host")}` +
-                `/c/${contentId}`;
+            await addContentCategories(
+                contentId,
+                categories
+            );
 
 
-            res.render(
-                "content/create-success",
+            // =====================================
+            // 7. SUCCESS
+            // =====================================
+
+            return res.render(
+                "content/create-link",
                 {
-                    contentId,
-                    publicUrl,
-                    destinationUrl
+                    error: null,
+                    createdLinkId: contentId
                 }
             );
 
-        }
-        catch (err) {
+        } catch (err) {
 
             console.error(
                 "Error creating link:",
                 err
             );
 
-
-            res.status(500).render(
+            return res.status(500).render(
                 "content/create-link",
                 {
-                    error:
-                        "Unable to create link."
+                    error: "Unable to create link.",
+                    createdLinkId: null
                 }
             );
-
         }
-
     }
 );
+
 
 /////
 router.get(
@@ -556,6 +556,22 @@ router.post(
                 altText
             } = req.body;
 
+            // =====================================
+            // CATEGORIES
+            // =====================================
+
+            const allowedCategories = ["1", "2", "3", "4"];
+
+            const categories = [
+                ...new Set(
+                    []
+                        .concat(req.body.categories || [])
+                        .filter(category =>
+                            allowedCategories.includes(category)
+                        )
+                )
+            ];
+
 
             // =====================================
             // VALIDATE
@@ -701,6 +717,11 @@ router.post(
             );
 
         }
+
+        await addContentCategories(
+            contentId,
+            categories
+        );
 
             // =====================================
             // SUCCESS
@@ -968,7 +989,7 @@ router.post(
         const userId = req.session.userId;
 
         const title = req.body.title?.trim();
-        const isActive = req.body.isActive === "true";
+       // const isActive = req.body.isActive === "true";
 
         // ==========================================
         // CATEGORIES
@@ -1054,8 +1075,7 @@ router.post(
                     contentId,
                     userId,
                     title,
-                    textBody,
-                    isActive
+                    textBody
                 );
 
 
@@ -1137,7 +1157,7 @@ router.post(
                         userId,
                         title,
                         destinationUrl,
-                        isActive
+                       // isActive
                     );
 
 
@@ -1177,7 +1197,6 @@ router.post(
                         userId,
                         title,
                         altText,
-                        isActive,
                         newCloudinaryImage
                     );
 

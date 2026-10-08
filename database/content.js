@@ -575,6 +575,7 @@ async function getContent(contentId) {
 
 }
 
+
 async function getBrowseContent(search = "", categoryId = "") {
 
     let sql = `
@@ -611,20 +612,38 @@ async function getBrowseContent(search = "", categoryId = "") {
         LEFT JOIN categories cat
             ON cc.category_id = cat.category_id
 
-        WHERE c.is_active = TRUE
+        WHERE (
+            c.content_type IN ('text', 'image')
+            OR (
+                c.content_type = 'redirect'
+                AND c.is_active = TRUE
+            )
+        )
 
-          AND (
-              c.expires_at IS NULL
-              OR c.expires_at > CURRENT_TIMESTAMP
-          )
+        AND (
+            c.expires_at IS NULL
+            OR c.expires_at > CURRENT_TIMESTAMP
+        )
     `;
 
     const params = {};
 
+    // =====================================
+    // TITLE SEARCH
+    // =====================================
+
     if (search) {
-        sql += ` AND c.title LIKE :search `;
+
+        sql += `
+            AND c.title LIKE :search
+        `;
+
         params.search = `%${search}%`;
     }
+
+    // =====================================
+    // CATEGORY FILTER
+    // =====================================
 
     if (categoryId) {
 
@@ -639,6 +658,10 @@ async function getBrowseContent(search = "", categoryId = "") {
 
         params.categoryId = Number(categoryId);
     }
+
+    // =====================================
+    // GROUP AND SORT
+    // =====================================
 
     sql += `
         GROUP BY
@@ -656,14 +679,21 @@ async function getBrowseContent(search = "", categoryId = "") {
 
     const [rows] = await database.query(sql, params);
 
+    // =====================================
+    // CONVERT CATEGORIES INTO ARRAYS
+    // =====================================
+
     rows.forEach(item => {
+
         item.categories = item.categories
             ? item.categories.split(",")
             : [];
+
     });
 
     return rows;
 }
+
 
 async function createImage(
     contentData,
@@ -942,7 +972,7 @@ async function getContentForEdit(contentId, userId) {
     return item;
 }
 
-async function updateText(contentId, userId, title, textBody, isActive) {
+async function updateText(contentId, userId, title, textBody) {
 
     let connection;
 
@@ -956,13 +986,11 @@ async function updateText(contentId, userId, title, textBody, isActive) {
         const [result] = await connection.query(`
             UPDATE content
             SET
-                title = :title,
-                is_active = :isActive
+                title = :title
             WHERE content_id = :contentId
               AND user_id = :userId;
         `, {
             title,
-            isActive,
             contentId,
             userId
         });
@@ -1006,8 +1034,7 @@ async function updateRedirect(
     contentId,
     userId,
     title,
-    destinationUrl,
-    isActive
+    destinationUrl
 ) {
 
     let connection;
@@ -1021,12 +1048,12 @@ async function updateRedirect(
             UPDATE content
             SET
                 title = :title,
-                is_active = :isActive
+                updated_at = CURRENT_TIMESTAMP
             WHERE content_id = :contentId
-              AND user_id = :userId;
+              AND user_id = :userId
+              AND content_type = 'redirect';;
         `, {
             title,
-            isActive,
             contentId,
             userId
         });
@@ -1070,7 +1097,6 @@ async function updateImage(
     userId,
     title,
     altText,
-    isActive,
     imageData = null
 ) {
 
@@ -1084,13 +1110,11 @@ async function updateImage(
         const [result] = await connection.query(`
             UPDATE content
             SET
-                title = :title,
-                is_active = :isActive
+                title = :title
             WHERE content_id = :contentId
               AND user_id = :userId;
         `, {
             title,
-            isActive,
             contentId,
             userId
         });

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -24,11 +24,9 @@
 
 </head>
 
-
 <body>
 
     <%- include("../partials/navbar") %>
-
 
     <section class="section">
 
@@ -36,166 +34,179 @@
 
             <div class="columns is-centered">
 
-                <div class="box">
+                <div class="column is-8-tablet is-6-desktop">
 
-                    <h1 class="title">
-                        Create Link
-                    </h1>
+                    <div class="box">
 
+                        <h1 class="title">
+                            Create Link
+                        </h1>
 
-                    <% if (error) { %>
+                        <!-- ERROR MESSAGE -->
 
-                        <div class="notification is-danger">
+                        <% if (typeof error !== "undefined" && error) { %>
 
-                            <%= error %>
-
-                        </div>
-
-                    <% } %>
-
-
-                    <form
-                        action="/content/create/link"
-                        method="POST"
-                    >
-
-
-                        <div class="field">
-
-                            <label class="label">
-                                Title
-                            </label>
-
-                            <div class="control">
-
-                                <input
-                                    class="input"
-                                    type="text"
-                                    name="title"
-                                    maxlength="255"
-                                >
-
+                            <div class="notification is-danger">
+                                <%= error %>
                             </div>
 
-                        </div>
+                        <% } %>
 
 
-                        <div class="field">
+                        <!-- CREATE LINK FORM -->
 
-                            <label class="label">
-                                Destination URL
-                            </label>
+                        <form
+                            action="/content/create/link"
+                            method="POST"
+                        >
 
-                            <div class="control">
+                            <!-- TITLE -->
 
-                                <input
-                                    class="input"
-                                    type="url"
-                                    name="destinationUrl"
-                                    placeholder="https://example.com"
-                                    required
-                                >
+                            <div class="field">
 
-                            </div>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label class="label">
-                                Custom URL
-                            </label>
-
-                            <div class="control">
-
-                                <input
-                                    class="input"
-                                    type="text"
-                                    name="customId"
-                                    maxlength="12"
-                                    placeholder="Optional"
-                                >
-
-                            </div>
-
-                            <p class="help">
-                                Leave blank to generate one automatically.
-                            </p>
-
-                        </div>
-
-                        <div class="field">
-
-                            <label class="label">
-                                Categories
-                            </label>
-
-                            <div class="control">
-
-                                <label class="checkbox mr-4">
-                                    <input
-                                        type="checkbox"
-                                        name="categories"
-                                        value="1"
-                                    >
-                                    Education
+                                <label class="label" for="title">
+                                    Title
                                 </label>
 
-                                <label class="checkbox mr-4">
+                                <div class="control">
+
                                     <input
-                                        type="checkbox"
-                                        name="categories"
-                                        value="2"
+                                        class="input"
+                                        id="title"
+                                        type="text"
+                                        name="title"
+                                        maxlength="255"
+                                        required
                                     >
-                                    Humor
-                                </label>
 
-                                <label class="checkbox mr-4">
-                                    <input
-                                        type="checkbox"
-                                        name="categories"
-                                        value="3"
-                                    >
-                                    Technology
-                                </label>
-
-                                <label class="checkbox">
-                                    <input
-                                        type="checkbox"
-                                        name="categories"
-                                        value="4"
-                                    >
-                                    Entertainment
-                                </label>
-
-                            </div>
-
-            
-
-                        </div>
-
-                         <div class="field">
-
-                        </div>
-
-                         <div class="field">
-
-                            <div class="control">
-
-                                <button
-                                    class="button is-primary"
-                                    type="submit"
-                                >
-                                    Create Link
-                                </button>
+                                </div>
 
                             </div>
 
 
-                        
+                            <!-- DESTINATION URL -->
 
-                    </form>
+                            <div class="field">
+
+                                <label class="label" for="destinationUrl">
+                                    Destination URL
+                                </label>
+
+                                <div class="control">
+
+                                    <input
+                                        class="input"
+                                        id="destinationUrl"
+                                        type="url"
+                                        name="destinationUrl"
+                                        placeholder="https://example.com"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- CUSTOM URL -->
+
+                            <div class="field">
+
+                                <label class="label" for="customId">
+                                    Custom URL
+                                </label>
+
+                                <div class="control">
+
+                                    <input
+                                        class="input"
+                                        id="customId"
+                                        type="text"
+                                        name="customId"
+                                        maxlength="12"
+                                        placeholder="Optional"
+                                    >
+
+                                </div>
+
+                                <p class="help">
+                                    Leave blank to generate one automatically.
+                                </p>
+
+                            </div>
+
+
+                            <!-- CATEGORIES -->
+
+                            <div class="field">
+
+                                <label class="label">
+                                    Categories
+                                </label>
+
+                                <div class="control">
+
+                                    <label class="checkbox mr-4">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="1"
+                                        >
+                                        Education
+                                    </label>
+
+                                    <label class="checkbox mr-4">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="2"
+                                        >
+                                        Humor
+                                    </label>
+
+                                    <label class="checkbox mr-4">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="3"
+                                        >
+                                        Technology
+                                    </label>
+
+                                    <label class="checkbox">
+                                        <input
+                                            type="checkbox"
+                                            name="categories"
+                                            value="4"
+                                        >
+                                        Entertainment
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- SUBMIT BUTTON -->
+
+                            <div class="field mt-5">
+
+                                <div class="control">
+
+                                    <button
+                                        class="button is-primary"
+                                        type="submit"
+                                    >
+                                        Create Link
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
@@ -205,8 +216,186 @@
 
     </section>
 
+
+    <!-- SUCCESS MODAL -->
+
+    <% if (typeof createdLinkId !== "undefined" && createdLinkId) { %>
+
+        <div
+            class="modal is-active"
+            id="linkCreatedModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="linkCreatedTitle"
+        >
+
+            <div class="modal-background"></div>
+
+            <div class="modal-card">
+
+                <header class="modal-card-head">
+
+                    <p
+                        class="modal-card-title"
+                        id="linkCreatedTitle"
+                    >
+                        Link Created Successfully!
+                    </p>
+
+                </header>
+
+                <section class="modal-card-body has-text-centered">
+
+                    <p class="mb-4">
+                        Your shortened link has been created.
+                    </p>
+
+                    <p>
+                        You will be redirected to your link in
+
+                        <strong>
+                            <span id="successCountdown">5</span>
+                        </strong>
+
+                        seconds.
+                    </p>
+
+                    <p class="has-text-grey mt-3">
+                        Alternatively, you can view your new link
+                        on your Stats page.
+                    </p>
+
+                </section>
+
+                <footer class="modal-card-foot">
+
+                    <button
+                        type="button"
+                        class="button is-dark"
+                        id="successGoNow"
+                    >
+                        Go Now
+                    </button>
+
+                    <button
+                        type="button"
+                        class="button is-light"
+                        id="successStay"
+                    >
+                        View My Links
+                    </button>
+
+                </footer>
+
+            </div>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- SUCCESS COUNTDOWN SCRIPT -->
+
+    <% if (typeof createdLinkId !== "undefined" && createdLinkId) { %>
+
+        <script>
+
+            document.addEventListener("DOMContentLoaded", () => {
+
+                const redirectUrl = "/c/<%= encodeURIComponent(createdLinkId) %>";
+
+                const statsUrl = "/content/stats";
+
+                const countdownElement =
+                    document.getElementById("successCountdown");
+
+                const goNowButton =
+                    document.getElementById("successGoNow");
+
+                const stayButton =
+                    document.getElementById("successStay");
+
+                let secondsRemaining = 5;
+                let countdownInterval = null;
+                let isRedirecting = false;
+
+
+                // =====================================
+                // REDIRECT TO CREATED LINK
+                // =====================================
+
+                function goToCreatedLink() {
+
+                    if (isRedirecting) {
+                        return;
+                    }
+
+                    isRedirecting = true;
+
+                    clearInterval(countdownInterval);
+
+                    window.location.assign(redirectUrl);
+                }
+
+
+                // =====================================
+                // REDIRECT TO STATS
+                // =====================================
+
+                function goToStats() {
+
+                    if (isRedirecting) {
+                        return;
+                    }
+
+                    isRedirecting = true;
+
+                    clearInterval(countdownInterval);
+
+                    window.location.assign(statsUrl);
+                }
+
+
+                // =====================================
+                // START COUNTDOWN
+                // =====================================
+
+                countdownInterval = setInterval(() => {
+
+                    secondsRemaining--;
+
+                    countdownElement.textContent =
+                        secondsRemaining;
+
+                    if (secondsRemaining <= 0) {
+                        goToCreatedLink();
+                    }
+
+                }, 1000);
+
+
+                // =====================================
+                // BUTTON EVENTS
+                // =====================================
+
+                goNowButton.addEventListener(
+                    "click",
+                    goToCreatedLink
+                );
+
+                stayButton.addEventListener(
+                    "click",
+                    goToStats
+                );
+
+            });
+
+        </script>
+
+    <% } %>
+
+
     <%- include("../partials/footer") %>
 
-    </body>
-
+</body>
 </html>

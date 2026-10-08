@@ -296,6 +296,34 @@ body {
     font-weight: 700;
 }
 
+/* LINK CREATION SUCCESS MODAL */
+
+#linkCreatedModal .modal-card {
+    max-width: 450px;
+    width: calc(100% - 2rem);
+    background-color: #ffe4ec;
+}
+
+#linkCreatedModal .modal-card-foot {
+    justify-content: center;
+    gap: 1.5rem;
+    background-color: #ffe4ec;
+}
+
+.modal-card-body{
+    background-color: #ffe4ec;
+     color: grey
+}
+.modal-card-head{
+    background-color: #ffe4ec;
+}
+
+#successCountdown {
+    color: #d63384;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
 /* =====================================
    FOOTER
 ===================================== */
